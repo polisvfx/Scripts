@@ -1,22 +1,22 @@
 param(
    [Parameter(Mandatory=$true)]
-   [string]$FileMask,
+   [string]$m,
    
    [Parameter(Mandatory=$true)]
-   [string]$FolderName,
+   [string]$t,
    
    [Parameter(Mandatory=$false)]
-   [string]$Exclude
+   [string]$x
 )
 
-$files = if ($Exclude) {
-   Get-ChildItem -file -recurse $FileMask | Where-Object { $_.Name -notlike $Exclude }
+$files = if ($x) {
+   Get-ChildItem -file -recurse $m | Where-Object { $_.Name -notlike $x }
 } else {
-   Get-ChildItem -file -recurse $FileMask
+   Get-ChildItem -file -recurse $m
 }
 
 foreach ($file in $files) {
-   $destinationfolderpath = $file.directoryname + "\" + $FolderName + "\"
+   $destinationfolderpath = $file.directoryname + "\" + $t + "\"
    New-Item $destinationfolderpath >$null -ItemType Directory -Force
    move-item $file -Destination $destinationfolderpath
    Write-Host "Moved $file to $destinationfolderpath"
